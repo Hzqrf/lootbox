@@ -6,11 +6,12 @@ import RouterSwitcher from "../config/RouterSwitcher";
 import LeftSidebar from "./LeftSidebar";
 import Header from "./Header";
 import { useDisclosure } from "@mantine/hooks";
+import Footer from "./Footer";
 
 function App() {
   // const [opened, { toggle }] = useDisclosure();
-  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
-  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
+  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure(false);
+  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(false);
 
   return (
     <AppShell
@@ -27,12 +28,13 @@ function App() {
       <AppShell.Main>
         <Header
           mobileOpened={mobileOpened}
+          desktopOpened={desktopOpened}
           toggleMobile={toggleMobile}
           toggleDesktop={toggleDesktop}
         />
         <RouterSwitcher />
       </AppShell.Main>
-      <AppShell.Footer>
+      {/* <AppShell.Footer>
         <Text
           size="sm"
           color="dimmed"
@@ -57,7 +59,8 @@ function App() {
         >
           Lootbox Asia - Admin Panel
         </Text>
-      </AppShell.Footer>
+      </AppShell.Footer> */}
+      <Footer />
     </AppShell>
   );
 }

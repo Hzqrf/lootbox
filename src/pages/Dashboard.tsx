@@ -135,7 +135,7 @@ export default function Dashboard() {
         </Group>
       </Header> */}
 
-      <Container>
+      <Container fluid>
         <Stack gap="xl">
           {/* Date Range Section */}
           <Card shadow="sm" padding="lg" radius="md" withBorder>

@@ -17,6 +17,7 @@ import {
   TbCloud,
   TbRefresh,
 } from "react-icons/tb";
+import logo from  "../assets/logo.png"
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const LeftSidebar = () => {
       classNames={{ navbar: "" }}
     >
       <AppShell.Section>
-        <img src="../assets/logo.png" />
+        <Image src={logo} fit="contain" h={"50px"}/>
       </AppShell.Section>
 
       {/* {Array(15)
