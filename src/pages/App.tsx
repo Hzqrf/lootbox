@@ -1,7 +1,7 @@
 import "../App.css";
 // core styles are required for all packages
 import "@mantine/core/styles.css";
-import { AppShell, Text } from "@mantine/core";
+import { AppShell, AppShellFooter, Text, Container } from "@mantine/core";
 import RouterSwitcher from "../config/RouterSwitcher";
 import LeftSidebar from "./LeftSidebar";
 import Header from "./Header";
@@ -10,8 +10,8 @@ import Footer from "./Footer";
 
 function App() {
   // const [opened, { toggle }] = useDisclosure();
-  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure(false);
-  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(false);
+  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure(true);
+  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 
   return (
     <AppShell
@@ -24,43 +24,21 @@ function App() {
       }}
       // aside={{ width: 300, breakpoint: 'md', collapsed: { desktop: false, mobile: true } }}
     >
+      <RouterSwitcher />
       <LeftSidebar />
-      <AppShell.Main>
-        <Header
-          mobileOpened={mobileOpened}
-          desktopOpened={desktopOpened}
-          toggleMobile={toggleMobile}
-          toggleDesktop={toggleDesktop}
-        />
-        <RouterSwitcher />
-      </AppShell.Main>
-      {/* <AppShell.Footer>
-        <Text
-          size="sm"
-          color="dimmed"
-          ta={"left"}
-          pl="30"
-          style={{
-            bottom: "20px",
-            width: "100%",
-          }}
-        >
-          2025 © Vamos.
-        </Text>
-        <Text
-          size="sm"
-          color="dimmed"
-          ta={"right"}
-          pr="30"
-          style={{
-            top: "20px",
-            width: "100%",
-          }}
-        >
-          Lootbox Asia - Admin Panel
-        </Text>
-      </AppShell.Footer> */}
-      <Footer />
+      <Container size="xl">
+        {" "}
+        {/* This controls the max width */}
+        <AppShell.Main>
+          <Header
+            mobileOpened={mobileOpened}
+            desktopOpened={desktopOpened}
+            toggleMobile={toggleMobile}
+            toggleDesktop={toggleDesktop}
+          />
+          <Footer />
+        </AppShell.Main>
+      </Container>
     </AppShell>
   );
 }

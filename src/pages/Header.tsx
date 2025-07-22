@@ -14,7 +14,6 @@ import {
   ActionIcon
 } from "@mantine/core";
 import { TbChevronRight } from "react-icons/tb";
-import classes from "../styles/HeaderMenu.module.css";
 import { forwardRef } from "react";
 import cat from "../assets/cat-meme.jpeg";
 import {
@@ -105,7 +104,7 @@ const Header = ({
               Lock Screen
             </Menu.Item>
             <Menu.Divider />
-            <Menu.Item leftSection={<TbLogout size={14} />}>Log Out</Menu.Item>
+            <Menu.Item leftSection={<TbLogout size={14} />} c={"red"}>Log Out</Menu.Item>
           </Menu.Dropdown>
         </Menu>
         <ActionIcon size={"lg"} variant="subtle" c={"white"}><TbSettings size={25}/></ActionIcon>

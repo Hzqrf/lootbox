@@ -1,4 +1,3 @@
-"use client";
 
 import {
   Container,
@@ -29,6 +28,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useState } from "react";
+import TableScrollArea from "../components/tableScroll";
 
 // Sample data for the chart
 const salesData = [
@@ -97,49 +97,16 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* <Header height={60} p="md">
-        <Group justify="space-between" h="100%">
-          <Group>
-            <ActionIcon variant="subtle" size="lg">
-              <IconMenu2 size={20} />
-            </ActionIcon>
-            <ThemeIcon
-              size="lg"
-              variant="gradient"
-              gradient={{ from: "violet", to: "purple" }}
-            >
-              <Text size="lg" fw={700} c="white">
-                S
-              </Text>
-            </ThemeIcon>
-          </Group>
-
-          <Breadcrumbs separator=">" separatorMargin="md">
-            {breadcrumbItems}
-          </Breadcrumbs>
-
-          <Group>
-            <ThemeIcon
-              size="lg"
-              variant="gradient"
-              gradient={{ from: "violet", to: "purple" }}
-            >
-              <Text size="lg" fw={700} c="white">
-                S
-              </Text>
-            </ThemeIcon>
-            <ActionIcon variant="subtle" size="lg">
-              <IconSettings size={20} />
-            </ActionIcon>
-          </Group>
-        </Group>
-      </Header> */}
 
       <Container fluid>
         <Stack gap="xl">
+          <Group justify="space-between">
+            <Text fw={500} size="lg" >Dashboard</Text>
+            <Text size="sm">Dashboards/Dashboard</Text>
+          </Group>
           {/* Date Range Section */}
           <Card shadow="sm" padding="lg" radius="md" withBorder>
-            <Text size="sm" fw={500} mb="md" c="dimmed">
+            <Text size="sm" fw={500} mb="md" c="dimmed" ta={"left"}>
               Date Range
             </Text>
             <Flex gap="md" align="end">
@@ -188,7 +155,7 @@ export default function Dashboard() {
 
           {/* Sales Analytics Chart */}
           <Card shadow="sm" padding="lg" radius="md" withBorder>
-            <Text size="lg" fw={600} mb="md">
+            <Text size="lg" fw={600} mb="md" ta={"left"}>
               Sales Analytics
             </Text>
             <div style={{ width: "100%", height: 400 }}>
@@ -228,8 +195,9 @@ export default function Dashboard() {
           </Card>
 
           {/* Purchase Overview Chart */}
+          <Group justify="space-between" grow>
           <Card shadow="sm" padding="lg" radius="md" withBorder>
-            <Text size="lg" fw={600} mb="md">
+            <Text size="lg" fw={600} mb="md" ta={"left"}>
               Purchase Overview
             </Text>
             <div style={{ width: "100%", height: 300 }}>
@@ -265,6 +233,41 @@ export default function Dashboard() {
                   />
                 </LineChart>
               </ResponsiveContainer>
+            </div>
+          </Card>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Text size="lg" fw={600} mb="md" ta={"left"}>
+              Top Selling Products
+            </Text>
+            <div style={{ width: "100%", height: 300 }}>
+            <TableScrollArea />
+            </div>
+          </Card>
+          </Group>
+          <Group justify="space-between" grow>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Text size="lg" fw={600} mb="md" ta={"left"}>
+              Top 10 Spenders
+            </Text>
+            <div style={{ width: "100%", height: 300 }}>
+            <TableScrollArea />
+            </div>
+          </Card>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Text size="lg" fw={600} mb="md" ta={"left"}>
+              Top 10 Referrers
+            </Text>
+            <div style={{ width: "100%", height: 300 }}>
+            <TableScrollArea />
+            </div>
+          </Card>
+          </Group>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Text size="lg" fw={600} mb="md" ta={"left"}>
+              Latest Order
+            </Text>
+            <div style={{ width: "100%", height: 300 }}>
+            <TableScrollArea />
             </div>
           </Card>
         </Stack>
