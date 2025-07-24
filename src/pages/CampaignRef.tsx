@@ -9,8 +9,6 @@ import {
   TextInput,
   Paper,
   Box,
-  ActionIcon,
-  Badge,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import {
@@ -19,7 +17,7 @@ import {
   type DataTableSortStatus,
 } from "mantine-datatable";
 import { sortBy } from "lodash";
-import { TbGift, TbList, TbEdit, TbCirclePlusFilled, TbEye } from "react-icons/tb";
+import { TbCirclePlusFilled, TbEye } from "react-icons/tb";
 
 interface Company {
   cam_id: number;

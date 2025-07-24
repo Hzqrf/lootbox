@@ -1,4 +1,4 @@
-import { AppShell, Container } from "@mantine/core";
+import { AppShell, Container, Text } from "@mantine/core";
 import { Outlet } from "react-router-dom";
 import Footer from "../pages/Footer";
 import Header from "../pages/Header";
@@ -20,18 +20,18 @@ export default function Layout() {
       }}
       // aside={{ width: 300, breakpoint: 'md', collapsed: { desktop: false, mobile: true } }}
     >
+      
       <LeftSidebar />
       <Container size="xl">
         {" "}
         {/* This controls the max width */}
-        <AppShell.Main>
+        <AppShell.Main  w={1225} >
           <Header
             mobileOpened={mobileOpened}
             desktopOpened={desktopOpened}
             toggleMobile={toggleMobile}
             toggleDesktop={toggleDesktop}
           />
-          {/* <RouterSwitcher /> */}
           <Outlet />
           <Footer />
         </AppShell.Main>

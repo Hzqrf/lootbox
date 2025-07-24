@@ -1,17 +1,9 @@
 import "../App.css";
 // core styles are required for all packages
 import "@mantine/core/styles.css";
-import { AppShell, AppShellFooter, Text, Container } from "@mantine/core";
 import RouterSwitcher from "../config/RouterSwitcher";
-import LeftSidebar from "./LeftSidebar";
-import Header from "./Header";
-import { useDisclosure } from "@mantine/hooks";
-import Footer from "./Footer";
 
 function App() {
-  // const [opened, { toggle }] = useDisclosure();
-  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure(true);
-  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 
   return (
     // <AppShell

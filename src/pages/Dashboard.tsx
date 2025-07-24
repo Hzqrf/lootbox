@@ -97,8 +97,7 @@ export default function Dashboard() {
 
   return (
     <>
-
-      <Container fluid>
+      <Container fluid >
         <Stack gap="xl">
           <Group justify="space-between">
             <Text fw={500} size="lg" >Dashboard</Text>

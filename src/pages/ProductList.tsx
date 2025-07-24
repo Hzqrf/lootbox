@@ -3,40 +3,16 @@ import {
   Group,
   Text,
   Card,
-  SimpleGrid,
   Button,
-  Flex,
-  ThemeIcon,
   Stack,
-  Anchor,
-  Tabs,
   Select,
   TextInput,
   Paper,
-  Table,
-  ScrollArea,
   Box,
   ActionIcon,
   Badge
 } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
-import {
-  TbShoppingCart,
-  TbCurrencyDollar,
-  TbPackage,
-  TbUser,
-} from "react-icons/tb";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { useEffect, useState } from "react";
-import TableScrollArea from "../components/tableScroll";
 import {
   DataTable,
   type DataTableColumn,
@@ -155,7 +131,7 @@ const objColumnOrdList: DataTableColumn<Company>[] = [
     accessor: "action",
     textAlign: "left",
     title: <Box mr={6}>Row actions</Box>,
-    render: (com) => (
+    render: () => (
       <Group gap={4} justify="right" wrap="nowrap">
         <ActionIcon size="lg" variant="filled" color="#f2b24e">
           <TbGift size={20} />
