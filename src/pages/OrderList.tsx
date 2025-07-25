@@ -355,18 +355,11 @@ const OrderList = () => {
                   height={600}
                   columns={objColumnOrdList}
                   records={paginatedData}
-                  // records={filteredData}
                   totalRecords={filteredData.length}
                   // for pagination
                   recordsPerPage={recordsPerPage}
                   page={page}
                   onPageChange={setPage}
-                  // recordsPerPageOptions={PAGE_SIZE}
-                  // onRecordsPerPageChange={setPageSize}
-
-                  // for sorting
-                  // sortStatus={sortStatus}
-                  // onSortStatusChange={setSortStatus}
                 />
               </div>
             </Card>

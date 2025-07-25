@@ -9,8 +9,9 @@ import {
   TextInput,
   Paper,
   Box,
+  Badge,
 } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   DataTable,
   type DataTableColumn,
@@ -20,224 +21,246 @@ import { sortBy } from "lodash";
 import { TbCirclePlusFilled, TbEye } from "react-icons/tb";
 
 interface Company {
-  cam_id: number;
-  cam_tier: number;
-  cam_title: string;
-  cam_desc: string;
-  cam_percentage: number;
+  user_id: number;
+  email: string;
+  prod_name: string;
+  item_name: string;
+  amt: number;
+  date: string;
+  status: boolean;
 }
 
 // mockup data for the table
 const companies: Company[] = [
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 1,
+    email: "test@gmail.ccom",
+    prod_name: "Mobile Legend (MY)",
+    item_name: "14 Diamonds (13 + 1 Bonus)",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: true,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 2,
+    email: "test@gmail.ccom",
+    prod_name: "Mirage: Perfect Skyline",
+    item_name: "3280 Jades",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: false,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 1,
+    email: "test@gmail.ccom",
+    prod_name: "Mobile Legend (MY)",
+    item_name: "14 Diamonds (13 + 1 Bonus)",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: true,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 2,
+    email: "test@gmail.ccom",
+    prod_name: "Mirage: Perfect Skyline",
+    item_name: "3280 Jades",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: false,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 1,
+    email: "test@gmail.ccom",
+    prod_name: "Mobile Legend (MY)",
+    item_name: "14 Diamonds (13 + 1 Bonus)",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: true,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 2,
+    email: "irfan@gmail.ccom",
+    prod_name: "Mirage: Perfect Skyline",
+    item_name: "3280 Jades",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: false,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 1,
+    email: "irfan@gmail.ccom",
+    prod_name: "Mobile Legend (MY)",
+    item_name: "14 Diamonds (13 + 1 Bonus)",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: true,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 2,
+    email: "irfan@gmail.ccom",
+    prod_name: "Mirage: Perfect Skyline",
+    item_name: "3280 Jades",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: false,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 1,
+    email: "irfan@gmail.ccom",
+    prod_name: "Mobile Legend (MY)",
+    item_name: "14 Diamonds (13 + 1 Bonus)",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: true,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 2,
+    email: "haziq@gmail.ccom",
+    prod_name: "Mirage: Perfect Skyline",
+    item_name: "3280 Jades",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: false,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 1,
+    email: "haziq@gmail.ccom",
+    prod_name: "Mobile Legend (MY)",
+    item_name: "14 Diamonds (13 + 1 Bonus)",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: true,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 2,
+    email: "haziq@gmail.ccom",
+    prod_name: "Mirage: Perfect Skyline",
+    item_name: "3280 Jades",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: false,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 1,
+    email: "haziq@gmail.ccom",
+    prod_name: "Mobile Legend (MY)",
+    item_name: "14 Diamonds (13 + 1 Bonus)",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: true,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 2,
+    email: "haziq@gmail.ccom",
+    prod_name: "Mirage: Perfect Skyline",
+    item_name: "3280 Jades",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: false,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 1,
+    email: "haziq@gmail.ccom",
+    prod_name: "Mobile Legend (MY)",
+    item_name: "14 Diamonds (13 + 1 Bonus)",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: true,
   },
   {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
-  },
-  {
-    cam_id: 1,
-    cam_tier: 1,
-    cam_title: "NEWBIE",
-    cam_desc: "10% 5,000 Sales",
-    cam_percentage: 10,
+    user_id: 2,
+    email: "haziq@gmail.ccom",
+    prod_name: "Mirage: Perfect Skyline",
+    item_name: "3280 Jades",
+    amt: 0.0,
+    date: "3/22/2025, 11:19:45 AM",
+    status: false,
   },
 ];
 
 // object of column table
 const objColumnOrdList: DataTableColumn<Company>[] = [
   {
-    accessor: "cam_id",
-    title: "ID",
+    accessor: "user_id",
+    title: "User ID",
     textAlign: "left",
     sortable: true,
   },
   {
-    accessor: "cam_tier",
-    title: "Tier",
+    accessor: "email",
+    title: "Email",
     textAlign: "left",
     sortable: true,
   },
   {
-    accessor: "cam_title",
-    title: "Title",
+    accessor: "prod_name",
+    title: "Product Name",
     textAlign: "left",
     sortable: true,
   },
   {
-    accessor: "cam_desc",
-    title: "Description",
+    accessor: "item_name",
+    title: "Item Name",
     textAlign: "left",
     sortable: true,
   },
   {
-    accessor: "cam_percentage",
-    title: "Percentage",
+    accessor: "amt",
+    title: "Amount",
     textAlign: "left",
     sortable: true,
   },
   {
-    accessor: "action",
+    accessor: "date",
+    title: "Giveaway Date",
     textAlign: "left",
-    title: <Box mr={6}>Action</Box>,
-    render: () => (
-      <Group gap={4} justify="center" wrap="nowrap">
-        <Button
-          size="xs"
-          variant="filled"
-          color="#556ee6"
-          leftSection={<TbEye />}
-        >
-          View
-        </Button>
-        {/* <ActionIcon size="lg" variant="filled" color="#556ee6">
-          <TbEye size={20} />
-        </ActionIcon> */}
-      </Group>
-    ),
+    sortable: true,
   },
+  {
+      accessor: "status",
+      title: "Status",
+      textAlign: "left",
+      sortable: true,
+      render: (e) => (
+        <Badge color={e.status ? "green" : "red"} variant="filled">
+          {e.status ? "Success" : "Failed"}
+        </Badge>
+      ),
+    },
 ];
 
 const PAGE_SIZE = [10, 25, 50, 100];
 
 const CampaignGiveaways = () => {
-  // pagination
-  const [pageSize, setPageSize] = useState(PAGE_SIZE[0]);
-
-  // search
-  const [searchQuery, setSearchQuery] = useState("");
-
-  // for sorting
-  const [sortStatus, setSortStatus] = useState<DataTableSortStatus<Company>>({
-    columnAccessor: "name",
-    direction: "asc",
-  });
-
-  useEffect(() => {
-    setPage(1);
-  }, [pageSize]);
-
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [records, setRecords] = useState(companies.slice(0, pageSize));
+  const [recordsPerPage, setRecordsPerPage] = useState(PAGE_SIZE[0]);
 
-  // for sorting
-  useEffect(() => {
-    const data = sortBy(companies, sortStatus.columnAccessor) as Company[];
-    setRecords(sortStatus.direction === "desc" ? data.reverse() : data);
-  }, [sortStatus]);
+  // Step 1: Filter the companies based on the search term
+  const filteredData = useMemo(() => {
+    return companies.filter((item) =>
+      Object.values(item).some((val) =>
+        String(val).toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search]);
 
-  // for pagination
-  useEffect(() => {
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize;
-    setRecords(companies.slice(from, to));
-  }, [page, pageSize]);
+  // Step 2: Paginate the filtered data
+  const paginatedData = useMemo(() => {
+    const start = (page - 1) * recordsPerPage;
+    return filteredData.slice(start, start + recordsPerPage);
+  }, [filteredData, page, recordsPerPage]);
+
+  // Reset to page 1 when search or per-page changes
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
+
+  const handlePerPageChange = (value: string | null) => {
+    setRecordsPerPage(Number(value));
+    setPage(1);
+  };
 
   return (
     <>
@@ -270,11 +293,8 @@ const CampaignGiveaways = () => {
                       Show
                     </Text>
                     <Select
-                      value={pageSize.toString()}
-                      onChange={(value) => {
-                        setPageSize(Number(value));
-                        setPage(1);
-                      }}
+                      value={recordsPerPage.toString()}
+                      onChange={handlePerPageChange}
                       data={[
                         { value: "10", label: "10" },
                         { value: "25", label: "25" },
@@ -295,9 +315,9 @@ const CampaignGiveaways = () => {
                       Search:
                     </Text>
                     <TextInput
-                      value={searchQuery}
-                      onChange={(event) =>
-                        setSearchQuery(event.currentTarget.value)
+                      value={search}
+                      onChange={(e) =>
+                        handleSearchChange(e.currentTarget.value)
                       }
                       placeholder=""
                       size="sm"
@@ -335,18 +355,16 @@ const CampaignGiveaways = () => {
 
                 <Paper withBorder>
                   <DataTable
+                    withTableBorder
                     textSelectionDisabled
-                    height={530}
+                    height={500}
                     columns={objColumnOrdList}
-                    records={records}
-                    totalRecords={companies.length}
+                    records={paginatedData}
+                    totalRecords={filteredData.length}
                     // for pagination
-                    recordsPerPage={pageSize}
+                    recordsPerPage={recordsPerPage}
                     page={page}
-                    onPageChange={(p) => setPage(p)}
-                    // for sorting
-                    sortStatus={sortStatus}
-                    onSortStatusChange={setSortStatus}
+                    onPageChange={setPage}
                   />
                 </Paper>
               </div>

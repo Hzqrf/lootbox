@@ -12,7 +12,7 @@ import {
   ActionIcon,
   Badge,
 } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   DataTable,
   type DataTableColumn,
@@ -99,7 +99,7 @@ const companies: Company[] = [
     game_id: "4",
     title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
     genre: "13242",
-    publisher: "	dsgdsrgr@gmail.com",
+    publisher: "	haziq@gmail.com",
     category: "Mobile Legend (MY)",
     ordering: "	14 Diamonds (13 + 1 Bonus)",
     enabled: false,
@@ -144,7 +144,7 @@ const companies: Company[] = [
     game_id: "5",
     title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
     genre: "13242",
-    publisher: "	dsgdsrgr@gmail.com",
+    publisher: "	irfan@gmail.com",
     category: "Mobile Legend (MY)",
     ordering: "	14 Diamonds (13 + 1 Bonus)",
     enabled: true,
@@ -258,37 +258,35 @@ const objColumnOrdList: DataTableColumn<Company>[] = [
 const PAGE_SIZE = [10, 25, 50, 100];
 
 const ProductList = () => {
-  // pagination
-  const [pageSize, setPageSize] = useState(PAGE_SIZE[0]);
-
-  // search
-  const [searchQuery, setSearchQuery] = useState("");
-
-  // for sorting
-  const [sortStatus, setSortStatus] = useState<DataTableSortStatus<Company>>({
-    columnAccessor: "name",
-    direction: "asc",
-  });
-
-  useEffect(() => {
-    setPage(1);
-  }, [pageSize]);
-  
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [records, setRecords] = useState(companies.slice(0, pageSize));
+  const [recordsPerPage, setRecordsPerPage] = useState(PAGE_SIZE[0]);
 
-  // for sorting
-  useEffect(() => {
-    const data = sortBy(companies, sortStatus.columnAccessor) as Company[];
-    setRecords(sortStatus.direction === "desc" ? data.reverse() : data);
-  }, [sortStatus]);
+  // Step 1: Filter the companies based on the search term
+  const filteredData = useMemo(() => {
+    return companies.filter((item) =>
+      Object.values(item).some((val) =>
+        String(val).toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search]);
 
-  // for pagination
-  useEffect(() => {
-      const from = (page - 1) * pageSize;
-      const to = from + pageSize;
-      setRecords(companies.slice(from, to));
-    }, [page, pageSize]);
+  // Step 2: Paginate the filtered data
+  const paginatedData = useMemo(() => {
+    const start = (page - 1) * recordsPerPage;
+    return filteredData.slice(start, start + recordsPerPage);
+  }, [filteredData, page, recordsPerPage]);
+
+  // Reset to page 1 when search or per-page changes
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
+
+  const handlePerPageChange = (value: string | null) => {
+    setRecordsPerPage(Number(value));
+    setPage(1);
+  };
 
   return (
     <>
@@ -316,11 +314,8 @@ const ProductList = () => {
                       Show
                     </Text>
                     <Select
-                      value={pageSize.toString()}
-                      onChange={(value) => {
-                        setPageSize(Number(value));
-                        setPage(1);
-                      }}
+                      value={recordsPerPage.toString()}
+                      onChange={handlePerPageChange}
                       data={[
                         { value: "10", label: "10" },
                         { value: "25", label: "25" },
@@ -341,9 +336,9 @@ const ProductList = () => {
                       Search:
                     </Text>
                     <TextInput
-                      value={searchQuery}
-                      onChange={(event) =>
-                        setSearchQuery(event.currentTarget.value)
+                      value={search}
+                      onChange={(e) =>
+                        handleSearchChange(e.currentTarget.value)
                       }
                       placeholder=""
                       size="sm"
@@ -381,18 +376,16 @@ const ProductList = () => {
 
                 <Paper withBorder>
                   <DataTable
+                    withTableBorder
                     textSelectionDisabled
                     height={600}
                     columns={objColumnOrdList}
-                    records={records}
-                    totalRecords={companies.length}
+                    records={paginatedData}
+                    totalRecords={filteredData.length}
                     // for pagination
-                    recordsPerPage={pageSize}
+                    recordsPerPage={recordsPerPage}
                     page={page}
-                    onPageChange={(p) => setPage(p)}
-                    // for sorting
-                    sortStatus={sortStatus}
-                    onSortStatusChange={setSortStatus}
+                    onPageChange={setPage}
                   />
                 </Paper>
               </div>
