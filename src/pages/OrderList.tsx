@@ -3,171 +3,278 @@ import {
   Group,
   Text,
   Card,
-  SimpleGrid,
-  Button,
-  Flex,
-  ThemeIcon,
   Stack,
-  Anchor,
   Tabs,
   Select,
   TextInput,
-  Paper,
-  Table,
-  ScrollArea,
 } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
+import { useState, useEffect, useMemo } from "react";
 import {
-  TbShoppingCart,
-  TbCurrencyDollar,
-  TbPackage,
-  TbUser,
-} from "react-icons/tb";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-import { useState } from "react";
-import TableScrollArea from "../components/tableScroll";
-import { DataTable } from 'mantine-datatable';
+  DataTable,
+  type DataTableColumn,
+  type DataTableSortStatus,
+} from "mantine-datatable";
+import "mantine-datatable/styles.layer.css";
+import sortBy from "lodash/sortBy";
 
-interface Order {
-  id: number;
-  referenceId: string;
-  userId: string;
+interface Company {
+  order_id: string;
+  reference_id: string;
+  user_id: string;
   email: string;
-  productName: string;
-  itemId: number;
+  product_name: string;
+  item_name: string;
   amount: number;
-  transactionDate: string;
-  createdDate: string;
+  trans_date: string;
+  created_date: string;
+  status: string;
 }
 
-const mockOrders: Order[] = [
+const companies: Company[] = [
   {
-    id: 818,
-    referenceId: "LBFB9A035A8E5DBAG12112569",
-    userId: "",
-    email: "tharshan1804@gmail.com",
-    productName: "121",
-    itemId: 2569,
-    amount: 25.7,
-    transactionDate: "-",
-    createdDate: "5/9/2025, 8:0",
+    order_id: "1",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "13242",
+    email: "	dsgdsrgr@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
   },
   {
-    id: 823,
-    referenceId: "LBAEB8FF81279DB1G12112586",
-    userId: "",
-    email: "darwishiman906@gmail.com",
-    productName: "121",
-    itemId: 2586,
-    amount: 85.52,
-    transactionDate: "-",
-    createdDate: "5/9/2025, 8:0",
+    order_id: "2",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "23242",
+    email: "	dsgdsrgr@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
   },
   {
-    id: 824,
-    referenceId: "LB56063A72B877AOG12112577",
-    userId: "32",
-    email: "hakimazmal_27@yahoo.com",
-    productName: "121",
-    itemId: 2577,
-    amount: 34.26,
-    transactionDate: "-",
-    createdDate: "5/9/2025, 8:0",
+    order_id: "3",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "33242",
+    email: "	dsgdsrgr@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
   },
   {
-    id: 825,
-    referenceId: "LBFOFA32346464I6G12112563",
-    userId: "",
-    email: "hafizbujang00@gmail.com",
-    productName: "121",
-    itemId: 2563,
-    amount: 21.42,
-    transactionDate: "-",
-    createdDate: "5/9/2025, 8:0",
+    order_id: "4",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "233",
+    email: "	haziq@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
   },
   {
-    id: 829,
-    referenceId: "LB6BB9A8B693C9E9G12112582",
-    userId: "",
-    email: "doremyfas0@gmail.com",
-    productName: "121",
-    itemId: 2582,
-    amount: 51.36,
-    transactionDate: "-",
-    createdDate: "5/9/2025, 8:1",
+    order_id: "5",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "22",
+    email: "	irfan@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
   },
   {
-    id: 834,
-    referenceId: "LB80C2B60122010BG12112597",
-    userId: "88",
-    email: "shafiq.haha@gmail.com",
-    productName: "121",
-    itemId: 2597,
-    amount: 256.67,
-    transactionDate: "-",
-    createdDate: "5/9/2025, 8:2",
+    order_id: "6",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "63242",
+    email: "	dsgdsrgr@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
   },
   {
-    id: 835,
-    referenceId: "LBA417E912A89F2CG12112547",
-    userId: "",
-    email: "Farhanimran4k@gmail.com",
-    productName: "121",
-    itemId: 2547,
-    amount: 1.75,
-    transactionDate: "-",
-    createdDate: "5/9/2025, 8:2",
+    order_id: "7",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "73242",
+    email: "	dsgdsrgr@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
   },
   {
-    id: 836,
-    referenceId: "LBDAC9F364858AAOG12112566",
-    userId: "",
-    email: "Thevaneshkuill@gmail.com",
-    productName: "121",
-    itemId: 2566,
-    amount: 22.03,
-    transactionDate: "-",
-    createdDate: "5/9/2025, 8:2",
+    order_id: "8",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "83242",
+    email: "	dsgdsrgr@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
+  },
+  {
+    order_id: "9",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "93242",
+    email: "	dsgdsrgr@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
+  },
+  {
+    order_id: "10",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "23242",
+    email: "	bazzi@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
+  },
+  {
+    order_id: "11",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "23242",
+    email: "	razzi@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
+  },
+  {
+    order_id: "12",
+    reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    user_id: "23242",
+    email: "	fawzan@gmail.com",
+    product_name: "Mobile Legend (MY)",
+    item_name: "	14 Diamonds (13 + 1 Bonus)",
+    amount: 1.06,
+    trans_date: "124325",
+    created_date: "231124",
+    status: "Success",
   },
 ];
 
+const objColumnOrdList: DataTableColumn<Company>[] = [
+  {
+    accessor: "order_id",
+    title: "Order ID",
+    textAlign: "left",
+    sortable: true,
+  },
+  {
+    accessor: "reference_id",
+    title: "Reference ID",
+    textAlign: "left",
+    sortable: true,
+  },
+  {
+    accessor: "user_id",
+    title: "User ID",
+    textAlign: "left",
+    sortable: true,
+  },
+  {
+    accessor: "email",
+    title: "Email",
+    textAlign: "left",
+    sortable: true,
+  },
+  {
+    accessor: "product_name",
+    title: "Product Name",
+    textAlign: "left",
+    sortable: true,
+  },
+  {
+    accessor: "item_name",
+    title: "Item Name",
+    textAlign: "left",
+    sortable: true,
+  },
+  {
+    accessor: "amount",
+    title: "Amount",
+    textAlign: "left",
+    sortable: true,
+  },
+  {
+    accessor: "trans_date",
+    title: "Transaction Date",
+    textAlign: "left",
+    sortable: true,
+  },
+  {
+    accessor: "created_date",
+    title: "Created Date",
+    textAlign: "left",
+    sortable: true,
+  },
+  {
+    accessor: "status",
+    title: "Status",
+    textAlign: "left",
+    sortable: true,
+  },
+];
+
+const PAGE_SIZE = [10, 25, 50, 100];
+
 const OrderList = () => {
-  const [activeTab, setActiveTab] = useState<string | null>("processing");
-  const [entriesPerPage, setEntriesPerPage] = useState<string | null>("10");
-  const [searchQuery, setSearchQuery] = useState("");
+  // tabs
+  const [activeTab, setActiveTab] = useState<string | null>("all");
 
-  const filteredOrders = mockOrders.filter(
-    (order) =>
-      order.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.referenceId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.id.toString().includes(searchQuery)
-  );
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [recordsPerPage, setRecordsPerPage] = useState(PAGE_SIZE[0]);
 
-  const rows = filteredOrders.map((order) => (
-    <Table.Tr key={order.id}>
-      <Table.Td>{order.id}</Table.Td>
-      <Table.Td>
-        <Anchor href="#" c="blue" size="sm">
-          {order.referenceId}
-        </Anchor>
-      </Table.Td>
-      <Table.Td>{order.userId || "-"}</Table.Td>
-      <Table.Td>{order.email}</Table.Td>
-      <Table.Td>{order.productName}</Table.Td>
-      <Table.Td>{order.itemId}</Table.Td>
-      <Table.Td>{order.amount.toFixed(2)}</Table.Td>
-      <Table.Td>{order.transactionDate}</Table.Td>
-      <Table.Td>{order.createdDate}</Table.Td>
-    </Table.Tr>
-  ));
+  // Step 1: Filter the companies based on the search term
+  const filteredData = useMemo(() => {
+    return companies.filter((item) =>
+      Object.values(item).some((val) =>
+        String(val).toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search]);
+
+  // Step 2: Paginate the filtered data
+  const paginatedData = useMemo(() => {
+    const start = (page - 1) * recordsPerPage;
+    return filteredData.slice(start, start + recordsPerPage);
+  }, [filteredData, page, recordsPerPage]);
+
+  // Reset to page 1 when search or per-page changes
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
+
+  const handlePerPageChange = (value: string | null) => {
+    setRecordsPerPage(Number(value));
+    setPage(1);
+  };
 
   return (
     <>
@@ -183,7 +290,7 @@ const OrderList = () => {
 
           {/* Table  */}
           <Group justify="space-between" grow>
-            <Card shadow="sm" padding="lg" radius="md" withBorder h={500}>
+            <Card shadow="sm" padding="lg" radius="md" withBorder h={800}>
               <Text size="lg" fw={600} mb="md" ta={"left"}>
                 Orders
               </Text>
@@ -208,11 +315,16 @@ const OrderList = () => {
                       Show
                     </Text>
                     <Select
-                      value={entriesPerPage}
-                      onChange={setEntriesPerPage}
-                      data={["10", "25", "50", "100"]}
-                      w={70}
+                      value={recordsPerPage.toString()}
+                      onChange={handlePerPageChange}
+                      data={[
+                        { value: "10", label: "10" },
+                        { value: "25", label: "25" },
+                        { value: "50", label: "50" },
+                        { value: "100", label: "100" },
+                      ]}
                       size="sm"
+                      w={80}
                     />
                     <Text size="sm" c="gray.7">
                       entries
@@ -225,9 +337,9 @@ const OrderList = () => {
                       Search:
                     </Text>
                     <TextInput
-                      value={searchQuery}
-                      onChange={(event) =>
-                        setSearchQuery(event.currentTarget.value)
+                      value={search}
+                      onChange={(e) =>
+                        handleSearchChange(e.currentTarget.value)
                       }
                       placeholder=""
                       size="sm"
@@ -236,26 +348,19 @@ const OrderList = () => {
                   </Group>
                 </Group>
 
-                <Paper withBorder>
-                  <Table.ScrollContainer minWidth={500} maxHeight={300}>
-                    <Table striped highlightOnHover>
-                      <Table.Thead>
-                        <Table.Tr>
-                          <Table.Th>ID</Table.Th>
-                          <Table.Th>Reference ID</Table.Th>
-                          <Table.Th>User ID</Table.Th>
-                          <Table.Th>Email</Table.Th>
-                          <Table.Th>Product Name</Table.Th>
-                          <Table.Th>Item ID</Table.Th>
-                          <Table.Th>Amount</Table.Th>
-                          <Table.Th>Transaction Date</Table.Th>
-                          <Table.Th>Created Date</Table.Th>
-                        </Table.Tr>
-                      </Table.Thead>
-                      <Table.Tbody>{rows}</Table.Tbody>
-                    </Table>
-                  </Table.ScrollContainer>
-                </Paper>
+                {/* Table */}
+                <DataTable
+                  withTableBorder
+                  textSelectionDisabled
+                  height={600}
+                  columns={objColumnOrdList}
+                  records={paginatedData}
+                  totalRecords={filteredData.length}
+                  // for pagination
+                  recordsPerPage={recordsPerPage}
+                  page={page}
+                  onPageChange={setPage}
+                />
               </div>
             </Card>
           </Group>
