@@ -3,31 +3,23 @@ import {
   Group,
   Text,
   Card,
-  SimpleGrid,
   Button,
-  Flex,
-  ThemeIcon,
   Stack,
-  Anchor,
-  Tabs,
   Select,
   TextInput,
   Paper,
-  Table,
-  ScrollArea,
   Box,
   ActionIcon,
   Badge,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
-import TableScrollArea from "../components/tableScroll";
 import {
   DataTable,
   type DataTableColumn,
   type DataTableSortStatus,
 } from "mantine-datatable";
 import { sortBy } from "lodash";
-import { TbGift, TbList, TbEdit } from "react-icons/tb";
+import { TbEdit } from "react-icons/tb";
 
 interface Company {
   game: string;
@@ -296,7 +288,7 @@ const objColumnOrdList: DataTableColumn<Company>[] = [
     accessor: "action",
     textAlign: "left",
     title: <Box mr={6}>Action</Box>,
-    render: (com) => (
+    render: () => (
       <Group gap={4} justify="center" wrap="nowrap">
         <ActionIcon size="lg" variant="filled" color="#556ee6">
           <TbEdit size={20} />
