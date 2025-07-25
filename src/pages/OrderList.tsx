@@ -8,7 +8,7 @@ import {
   Select,
   TextInput,
 } from "@mantine/core";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   DataTable,
   type DataTableColumn,
@@ -243,47 +243,38 @@ const objColumnOrdList: DataTableColumn<Company>[] = [
 const PAGE_SIZE = [10, 25, 50, 100];
 
 const OrderList = () => {
-  // pagination
-  const [pageSize, setPageSize] = useState(PAGE_SIZE[0]);
-
   // tabs
   const [activeTab, setActiveTab] = useState<string | null>("all");
 
-  // search
-  const [searchQuery, setSearchQuery] = useState("");
-
-  // for sorting
-  const [sortStatus, setSortStatus] = useState<DataTableSortStatus<Company>>({
-    columnAccessor: "name",
-    direction: "asc",
-  });
-
-  useEffect(() => {
-    setPage(1);
-  }, [pageSize]);
-
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [recordsPerPage, setRecordsPerPage] = useState(PAGE_SIZE[0]);
 
-  // search filter
-  // const filteredData = companies.filter((item) =>
-  //   Object.values(item).some((value) =>
-  //     String(value).toLowerCase().includes(searchQuery.toLowerCase())
-  //   )
-  // );
+  // Step 1: Filter the companies based on the search term
+  const filteredData = useMemo(() => {
+    return companies.filter((item) =>
+      Object.values(item).some((val) =>
+        String(val).toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search]);
 
-  const [records, setRecords] = useState(companies.slice(0, pageSize));
-  // for sorting
-  useEffect(() => {
-    const data = sortBy(companies, sortStatus.columnAccessor) as Company[];
-    setRecords(sortStatus.direction === "desc" ? data.reverse() : data);
-  }, [sortStatus]);
+  // Step 2: Paginate the filtered data
+  const paginatedData = useMemo(() => {
+    const start = (page - 1) * recordsPerPage;
+    return filteredData.slice(start, start + recordsPerPage);
+  }, [filteredData, page, recordsPerPage]);
 
-  // pagination
-  useEffect(() => {
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize;
-    setRecords(companies.slice(from, to));
-  }, [page, pageSize]);
+  // Reset to page 1 when search or per-page changes
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
+
+  const handlePerPageChange = (value: string | null) => {
+    setRecordsPerPage(Number(value));
+    setPage(1);
+  };
 
   return (
     <>
@@ -324,11 +315,8 @@ const OrderList = () => {
                       Show
                     </Text>
                     <Select
-                      value={pageSize.toString()}
-                      onChange={(value) => {
-                        setPageSize(Number(value));
-                        setPage(1);
-                      }}
+                      value={recordsPerPage.toString()}
+                      onChange={handlePerPageChange}
                       data={[
                         { value: "10", label: "10" },
                         { value: "25", label: "25" },
@@ -349,9 +337,9 @@ const OrderList = () => {
                       Search:
                     </Text>
                     <TextInput
-                      value={searchQuery}
-                      onChange={(event) =>
-                        setSearchQuery(event.currentTarget.value)
+                      value={search}
+                      onChange={(e) =>
+                        handleSearchChange(e.currentTarget.value)
                       }
                       placeholder=""
                       size="sm"
@@ -366,19 +354,19 @@ const OrderList = () => {
                   textSelectionDisabled
                   height={600}
                   columns={objColumnOrdList}
-                  records={records}
+                  records={paginatedData}
                   // records={filteredData}
-                  totalRecords={companies.length}
+                  totalRecords={filteredData.length}
                   // for pagination
-                  recordsPerPage={pageSize}
+                  recordsPerPage={recordsPerPage}
                   page={page}
-                  onPageChange={(p) => setPage(p)}
+                  onPageChange={setPage}
                   // recordsPerPageOptions={PAGE_SIZE}
                   // onRecordsPerPageChange={setPageSize}
 
                   // for sorting
-                  sortStatus={sortStatus}
-                  onSortStatusChange={setSortStatus}
+                  // sortStatus={sortStatus}
+                  // onSortStatusChange={setSortStatus}
                 />
               </div>
             </Card>
