@@ -3,304 +3,202 @@ import {
   Group,
   Text,
   Card,
-  SimpleGrid,
   Button,
-  Flex,
-  ThemeIcon,
   Stack,
-  Anchor,
-  Tabs,
   Select,
   TextInput,
   Paper,
-  Table,
-  ScrollArea,
   Box,
-  ActionIcon,
-  Badge,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
-import TableScrollArea from "../components/tableScroll";
 import {
   DataTable,
   type DataTableColumn,
   type DataTableSortStatus,
 } from "mantine-datatable";
 import { sortBy } from "lodash";
-import { TbGift, TbList, TbEdit } from "react-icons/tb";
+import { TbCirclePlusFilled, TbEye } from "react-icons/tb";
 
 interface Company {
-  game: string;
-  product_id: string;
-  name: string;
-  price: number;
-  retail_price: number;
-  sell_price: number;
-  enabled: boolean;
-  hot_item: boolean;
+  cam_id: number;
+  cam_tier: number;
+  cam_title: string;
+  cam_desc: string;
+  cam_percentage: number;
 }
 
+// mockup data for the table
 const companies: Company[] = [
   {
-    game: "Ace Racer",
-    product_id: "	2790",
-    name: "60+5 Tokens",
-    price: 3.45,
-    retail_price: 3.61,
-    sell_price: 3.8,
-    enabled: true,
-    hot_item: false,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Mobile Legend (MY/SG)",
-    product_id: "2720",
-    name: "38 + 4 Diamonds",
-    price: 3.07,
-    retail_price: 3.22,
-    sell_price: 3.38,
-    enabled: false,
-    hot_item: true,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Ace Racer",
-    product_id: "	2790",
-    name: "60+5 Tokens",
-    price: 3.45,
-    retail_price: 3.61,
-    sell_price: 3.8,
-    enabled: true,
-    hot_item: false,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Mobile Legend (MY/SG)",
-    product_id: "2720",
-    name: "38 + 4 Diamonds",
-    price: 3.07,
-    retail_price: 3.22,
-    sell_price: 3.38,
-    enabled: false,
-    hot_item: true,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Ace Racer",
-    product_id: "	2790",
-    name: "60+5 Tokens",
-    price: 3.45,
-    retail_price: 3.61,
-    sell_price: 3.8,
-    enabled: true,
-    hot_item: false,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Mobile Legend (MY/SG)",
-    product_id: "2720",
-    name: "38 + 4 Diamonds",
-    price: 3.07,
-    retail_price: 3.22,
-    sell_price: 3.38,
-    enabled: false,
-    hot_item: true,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Ace Racer",
-    product_id: "	2790",
-    name: "60+5 Tokens",
-    price: 3.45,
-    retail_price: 3.61,
-    sell_price: 3.8,
-    enabled: true,
-    hot_item: false,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Mobile Legend (MY/SG)",
-    product_id: "2720",
-    name: "38 + 4 Diamonds",
-    price: 3.07,
-    retail_price: 3.22,
-    sell_price: 3.38,
-    enabled: false,
-    hot_item: true,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Ace Racer",
-    product_id: "	2790",
-    name: "60+5 Tokens",
-    price: 3.45,
-    retail_price: 3.61,
-    sell_price: 3.8,
-    enabled: true,
-    hot_item: false,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Mobile Legend (MY/SG)",
-    product_id: "2720",
-    name: "38 + 4 Diamonds",
-    price: 3.07,
-    retail_price: 3.22,
-    sell_price: 3.38,
-    enabled: false,
-    hot_item: true,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Ace Racer",
-    product_id: "	2790",
-    name: "60+5 Tokens",
-    price: 3.45,
-    retail_price: 3.61,
-    sell_price: 3.8,
-    enabled: true,
-    hot_item: false,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Mobile Legend (MY/SG)",
-    product_id: "2720",
-    name: "38 + 4 Diamonds",
-    price: 3.07,
-    retail_price: 3.22,
-    sell_price: 3.38,
-    enabled: false,
-    hot_item: true,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Ace Racer",
-    product_id: "	2790",
-    name: "60+5 Tokens",
-    price: 3.45,
-    retail_price: 3.61,
-    sell_price: 3.8,
-    enabled: true,
-    hot_item: false,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Mobile Legend (MY/SG)",
-    product_id: "2720",
-    name: "38 + 4 Diamonds",
-    price: 3.07,
-    retail_price: 3.22,
-    sell_price: 3.38,
-    enabled: false,
-    hot_item: true,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Ace Racer",
-    product_id: "	2790",
-    name: "60+5 Tokens",
-    price: 3.45,
-    retail_price: 3.61,
-    sell_price: 3.8,
-    enabled: true,
-    hot_item: false,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Mobile Legend (MY/SG)",
-    product_id: "2720",
-    name: "38 + 4 Diamonds",
-    price: 3.07,
-    retail_price: 3.22,
-    sell_price: 3.38,
-    enabled: false,
-    hot_item: true,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
   {
-    game: "Ace Racer",
-    product_id: "	2790",
-    name: "60+5 Tokens",
-    price: 3.45,
-    retail_price: 3.61,
-    sell_price: 3.8,
-    enabled: true,
-    hot_item: false,
-  },
-  {
-    game: "Mobile Legend (MY/SG)",
-    product_id: "2720",
-    name: "38 + 4 Diamonds",
-    price: 3.07,
-    retail_price: 3.22,
-    sell_price: 3.38,
-    enabled: false,
-    hot_item: true,
-  },
-  {
-    game: "Ace Racer",
-    product_id: "	2790",
-    name: "60+5 Tokens",
-    price: 3.45,
-    retail_price: 3.61,
-    sell_price: 3.8,
-    enabled: true,
-    hot_item: false,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
   },
 ];
 
+// object of column table
 const objColumnOrdList: DataTableColumn<Company>[] = [
   {
-    accessor: "game",
-    title: "Game",
+    accessor: "cam_id",
+    title: "ID",
     textAlign: "left",
     sortable: true,
   },
   {
-    accessor: "product_id",
-    title: "Product ID",
+    accessor: "cam_tier",
+    title: "Tier",
     textAlign: "left",
     sortable: true,
   },
   {
-    accessor: "name",
-    title: "Name",
+    accessor: "cam_title",
+    title: "Title",
     textAlign: "left",
     sortable: true,
   },
   {
-    accessor: "price",
-    title: "Price",
+    accessor: "cam_desc",
+    title: "Description",
     textAlign: "left",
     sortable: true,
   },
   {
-    accessor: "retail_price",
-    title: "Retail Price",
+    accessor: "cam_percentage",
+    title: "Percentage",
     textAlign: "left",
     sortable: true,
-  },
-  {
-    accessor: "sell_price",
-    title: "Sell Price",
-    textAlign: "left",
-    sortable: true,
-  },
-  {
-    accessor: "enabled",
-    title: "Enabled",
-    textAlign: "left",
-    sortable: true,
-    render: (record) => (
-      <Badge color={record.enabled ? "green" : "red"} variant="filled">
-        {record.enabled ? "Enabled" : "Disabled"}
-      </Badge>
-    ),
-  },
-  {
-    accessor: "hot_item",
-    title: "Hot Item",
-    textAlign: "left",
-    sortable: true,
-    render: (record) => (
-      <Badge color={record.hot_item ? "green" : "red"} variant="filled">
-        {record.hot_item ? "Enabled" : "Disabled"}
-      </Badge>
-    ),
   },
   {
     accessor: "action",
     textAlign: "left",
     title: <Box mr={6}>Action</Box>,
-    render: (com) => (
+    render: () => (
       <Group gap={4} justify="center" wrap="nowrap">
-        <ActionIcon size="lg" variant="filled" color="#556ee6">
-          <TbEdit size={20} />
-        </ActionIcon>
+        <Button
+          size="xs"
+          variant="filled"
+          color="#556ee6"
+          leftSection={<TbEye />}
+        >
+          View
+        </Button>
+        {/* <ActionIcon size="lg" variant="filled" color="#556ee6">
+          <TbEye size={20} />
+        </ActionIcon> */}
       </Group>
     ),
   },
@@ -308,7 +206,7 @@ const objColumnOrdList: DataTableColumn<Company>[] = [
 
 const PAGE_SIZE = [10, 25, 50, 100];
 
-const ProductItems = () => {
+const CampaignGiveaways = () => {
   // pagination
   const [pageSize, setPageSize] = useState(PAGE_SIZE[0]);
 
@@ -324,7 +222,7 @@ const ProductItems = () => {
   useEffect(() => {
     setPage(1);
   }, [pageSize]);
-  
+
   const [page, setPage] = useState(1);
   const [records, setRecords] = useState(companies.slice(0, pageSize));
 
@@ -348,17 +246,22 @@ const ProductItems = () => {
           {/* Title Page */}
           <Group justify="space-between">
             <Text fw={500} size="lg">
-              Product Items
+              Giveaway List
             </Text>
-            <Text size="sm">Admin / Product Items</Text>
+            <Text size="sm">Admin / Giveaway List</Text>
           </Group>
 
           {/* Table  */}
           <Group justify="space-between" grow>
             <Card shadow="sm" padding="lg" radius="md" withBorder h={800}>
               <Text size="lg" fw={600} mb="md" ta={"left"}>
-                Product Items
+                Giveaway List
               </Text>
+              <Group w={200} pb={20}>
+                <Button leftSection={<TbCirclePlusFilled />}>
+                  Create Giveaway
+                </Button>
+              </Group>
               <div style={{ width: "100%", height: 300 }}>
                 {/* Select */}
                 <Group justify="space-between" mb="md">
@@ -433,7 +336,7 @@ const ProductItems = () => {
                 <Paper withBorder>
                   <DataTable
                     textSelectionDisabled
-                    height={600}
+                    height={530}
                     columns={objColumnOrdList}
                     records={records}
                     totalRecords={companies.length}
@@ -455,4 +358,4 @@ const ProductItems = () => {
   );
 };
 
-export default ProductItems;
+export default CampaignGiveaways;

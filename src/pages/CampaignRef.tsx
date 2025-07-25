@@ -30,8 +30,120 @@ interface Company {
 // mockup data for the table
 const companies: Company[] = [
   {
-    cam_id:1,
-    cam_tier:1,
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
+    cam_title: "NEWBIE",
+    cam_desc: "10% 5,000 Sales",
+    cam_percentage: 10,
+  },
+  {
+    cam_id: 1,
+    cam_tier: 1,
     cam_title: "NEWBIE",
     cam_desc: "10% 5,000 Sales",
     cam_percentage: 10,
@@ -76,7 +188,12 @@ const objColumnOrdList: DataTableColumn<Company>[] = [
     title: <Box mr={6}>Action</Box>,
     render: () => (
       <Group gap={4} justify="center" wrap="nowrap">
-        <Button size="xs" variant="filled" color="#556ee6" leftSection={<TbEye/>}>
+        <Button
+          size="xs"
+          variant="filled"
+          color="#556ee6"
+          leftSection={<TbEye />}
+        >
           View
         </Button>
         {/* <ActionIcon size="lg" variant="filled" color="#556ee6">
@@ -87,11 +204,13 @@ const objColumnOrdList: DataTableColumn<Company>[] = [
   },
 ];
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = [10, 25, 50, 100];
 
 const CampaignReferral = () => {
-  const [entriesPerPage, setEntriesPerPage] = useState<string | null>("10");
-  const perPageNumber = parseInt(entriesPerPage || "10", 10);
+  // pagination
+  const [pageSize, setPageSize] = useState(PAGE_SIZE[0]);
+
+  // search
   const [searchQuery, setSearchQuery] = useState("");
 
   // for sorting
@@ -100,21 +219,25 @@ const CampaignReferral = () => {
     direction: "asc",
   });
 
-  const [page, setPage] = useState(1);
-  const [records, setRecords] = useState(companies.slice(0, PAGE_SIZE));
-
-  // for pagination
   useEffect(() => {
-    const from = (page - 1) * PAGE_SIZE;
-    const to = from + PAGE_SIZE;
-    setRecords(companies.slice(from, to));
-  }, [page]);
+    setPage(1);
+  }, [pageSize]);
+
+  const [page, setPage] = useState(1);
+  const [records, setRecords] = useState(companies.slice(0, pageSize));
 
   // for sorting
   useEffect(() => {
     const data = sortBy(companies, sortStatus.columnAccessor) as Company[];
     setRecords(sortStatus.direction === "desc" ? data.reverse() : data);
   }, [sortStatus]);
+
+  // for pagination
+  useEffect(() => {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+    setRecords(companies.slice(from, to));
+  }, [page, pageSize]);
 
   return (
     <>
@@ -134,8 +257,10 @@ const CampaignReferral = () => {
               <Text size="lg" fw={600} mb="md" ta={"left"}>
                 Referral Campaign List
               </Text>
-              <Group w={200} pb={20} >
-                <Button leftSection={<TbCirclePlusFilled/>}>Create New Campaign</Button>
+              <Group w={200} pb={20}>
+                <Button leftSection={<TbCirclePlusFilled />}>
+                  Create New Campaign
+                </Button>
               </Group>
               <div style={{ width: "100%", height: 300 }}>
                 {/* Select */}
@@ -145,11 +270,19 @@ const CampaignReferral = () => {
                       Show
                     </Text>
                     <Select
-                      value={entriesPerPage}
-                      onChange={setEntriesPerPage}
-                      data={["10", "25", "50", "100"]}
-                      w={70}
+                      value={pageSize.toString()}
+                      onChange={(value) => {
+                        setPageSize(Number(value));
+                        setPage(1);
+                      }}
+                      data={[
+                        { value: "10", label: "10" },
+                        { value: "25", label: "25" },
+                        { value: "50", label: "50" },
+                        { value: "100", label: "100" },
+                      ]}
                       size="sm"
+                      w={80}
                     />
                     <Text size="sm" c="gray.7">
                       entries
@@ -203,12 +336,12 @@ const CampaignReferral = () => {
                 <Paper withBorder>
                   <DataTable
                     textSelectionDisabled
-                    height={600}
+                    height={530}
                     columns={objColumnOrdList}
-                    // for pagination
                     records={records}
                     totalRecords={companies.length}
-                    recordsPerPage={perPageNumber}
+                    // for pagination
+                    recordsPerPage={pageSize}
                     page={page}
                     onPageChange={(p) => setPage(p)}
                     // for sorting

@@ -6,6 +6,7 @@ import Layout from "../components/Layout";
 import ProductList from "../pages/ProductList";
 import ProductItems from "../pages/ProductItem";
 import CampaignReferral from "../pages/CampaignRef";
+import CampaignGiveaways from "../pages/CampaignGive";
 
 const RouterSwitcher = () => {
   return (
@@ -20,6 +21,7 @@ const RouterSwitcher = () => {
         <Route path="/products/product-list" element={<ProductList />} />
         <Route path="/products/product-items" element={<ProductItems />} />
         <Route path="/campaign/referrals" element={<CampaignReferral />} />
+        <Route path="/campaign/giveaways" element={<CampaignGiveaways />} />
       </Route>
     </Routes>
   );

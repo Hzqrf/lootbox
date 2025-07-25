@@ -10,7 +10,7 @@ import {
   Paper,
   Box,
   ActionIcon,
-  Badge
+  Badge,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import {
@@ -52,6 +52,114 @@ const companies: Company[] = [
   },
   {
     game_id: "3",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: true,
+  },
+  {
+    game_id: "4",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: false,
+  },
+  {
+    game_id: "5",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: true,
+  },
+  {
+    game_id: "4",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: false,
+  },
+  {
+    game_id: "5",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: true,
+  },
+  {
+    game_id: "4",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: false,
+  },
+  {
+    game_id: "5",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: true,
+  },
+  {
+    game_id: "4",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: false,
+  },
+  {
+    game_id: "5",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: true,
+  },
+  {
+    game_id: "4",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: false,
+  },
+  {
+    game_id: "5",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: true,
+  },
+  {
+    game_id: "4",
+    title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+    genre: "13242",
+    publisher: "	dsgdsrgr@gmail.com",
+    category: "Mobile Legend (MY)",
+    ordering: "	14 Diamonds (13 + 1 Bonus)",
+    enabled: false,
+  },
+  {
+    game_id: "5",
     title: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
     genre: "13242",
     publisher: "	dsgdsrgr@gmail.com",
@@ -147,11 +255,13 @@ const objColumnOrdList: DataTableColumn<Company>[] = [
   },
 ];
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = [10, 25, 50, 100];
 
 const ProductList = () => {
-  const [entriesPerPage, setEntriesPerPage] = useState<string | null>("10");
-  const perPageNumber = parseInt(entriesPerPage || "10", 10);
+  // pagination
+  const [pageSize, setPageSize] = useState(PAGE_SIZE[0]);
+
+  // search
   const [searchQuery, setSearchQuery] = useState("");
 
   // for sorting
@@ -160,21 +270,25 @@ const ProductList = () => {
     direction: "asc",
   });
 
-  const [page, setPage] = useState(1);
-  const [records, setRecords] = useState(companies.slice(0, PAGE_SIZE));
-
-  // for pagination
   useEffect(() => {
-    const from = (page - 1) * PAGE_SIZE;
-    const to = from + PAGE_SIZE;
-    setRecords(companies.slice(from, to));
-  }, [page]);
+    setPage(1);
+  }, [pageSize]);
+  
+  const [page, setPage] = useState(1);
+  const [records, setRecords] = useState(companies.slice(0, pageSize));
 
   // for sorting
   useEffect(() => {
     const data = sortBy(companies, sortStatus.columnAccessor) as Company[];
     setRecords(sortStatus.direction === "desc" ? data.reverse() : data);
   }, [sortStatus]);
+
+  // for pagination
+  useEffect(() => {
+      const from = (page - 1) * pageSize;
+      const to = from + pageSize;
+      setRecords(companies.slice(from, to));
+    }, [page, pageSize]);
 
   return (
     <>
@@ -202,11 +316,19 @@ const ProductList = () => {
                       Show
                     </Text>
                     <Select
-                      value={entriesPerPage}
-                      onChange={setEntriesPerPage}
-                      data={["10", "25", "50", "100"]}
-                      w={70}
+                      value={pageSize.toString()}
+                      onChange={(value) => {
+                        setPageSize(Number(value));
+                        setPage(1);
+                      }}
+                      data={[
+                        { value: "10", label: "10" },
+                        { value: "25", label: "25" },
+                        { value: "50", label: "50" },
+                        { value: "100", label: "100" },
+                      ]}
                       size="sm"
+                      w={80}
                     />
                     <Text size="sm" c="gray.7">
                       entries
@@ -262,10 +384,10 @@ const ProductList = () => {
                     textSelectionDisabled
                     height={600}
                     columns={objColumnOrdList}
-                    // for pagination
                     records={records}
                     totalRecords={companies.length}
-                    recordsPerPage={perPageNumber}
+                    // for pagination
+                    recordsPerPage={pageSize}
                     page={page}
                     onPageChange={(p) => setPage(p)}
                     // for sorting

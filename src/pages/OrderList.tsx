@@ -9,7 +9,11 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useState, useEffect } from "react";
-import { DataTable, type DataTableColumn, type DataTableSortStatus } from "mantine-datatable";
+import {
+  DataTable,
+  type DataTableColumn,
+  type DataTableSortStatus,
+} from "mantine-datatable";
 import "mantine-datatable/styles.layer.css";
 import sortBy from "lodash/sortBy";
 
@@ -66,8 +70,8 @@ const companies: Company[] = [
   {
     order_id: "4",
     reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
-    user_id: "43242",
-    email: "	dsgdsrgr@gmail.com",
+    user_id: "233",
+    email: "	haziq@gmail.com",
     product_name: "Mobile Legend (MY)",
     item_name: "	14 Diamonds (13 + 1 Bonus)",
     amount: 1.06,
@@ -78,8 +82,8 @@ const companies: Company[] = [
   {
     order_id: "5",
     reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
-    user_id: "53242",
-    email: "	dsgdsrgr@gmail.com",
+    user_id: "22",
+    email: "	irfan@gmail.com",
     product_name: "Mobile Legend (MY)",
     item_name: "	14 Diamonds (13 + 1 Bonus)",
     amount: 1.06,
@@ -139,7 +143,7 @@ const companies: Company[] = [
     order_id: "10",
     reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
     user_id: "23242",
-    email: "	dsgdsrgr@gmail.com",
+    email: "	bazzi@gmail.com",
     product_name: "Mobile Legend (MY)",
     item_name: "	14 Diamonds (13 + 1 Bonus)",
     amount: 1.06,
@@ -151,7 +155,7 @@ const companies: Company[] = [
     order_id: "11",
     reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
     user_id: "23242",
-    email: "	dsgdsrgr@gmail.com",
+    email: "	razzi@gmail.com",
     product_name: "Mobile Legend (MY)",
     item_name: "	14 Diamonds (13 + 1 Bonus)",
     amount: 1.06,
@@ -163,7 +167,7 @@ const companies: Company[] = [
     order_id: "12",
     reference_id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
     user_id: "23242",
-    email: "	dsgdsrgr@gmail.com",
+    email: "	fawzan@gmail.com",
     product_name: "Mobile Legend (MY)",
     item_name: "	14 Diamonds (13 + 1 Bonus)",
     amount: 1.06,
@@ -233,15 +237,19 @@ const objColumnOrdList: DataTableColumn<Company>[] = [
     title: "Status",
     textAlign: "left",
     sortable: true,
-  }
+  },
 ];
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = [10, 25, 50, 100];
 
 const OrderList = () => {
+  // pagination
+  const [pageSize, setPageSize] = useState(PAGE_SIZE[0]);
+
+  // tabs
   const [activeTab, setActiveTab] = useState<string | null>("all");
-  const [entriesPerPage, setEntriesPerPage] = useState<string | null>("10");
-  const perPageNumber = parseInt(entriesPerPage || "10", 10);
+
+  // search
   const [searchQuery, setSearchQuery] = useState("");
 
   // for sorting
@@ -250,21 +258,32 @@ const OrderList = () => {
     direction: "asc",
   });
 
-  const [page, setPage] = useState(1);
-  const [records, setRecords] = useState(companies.slice(0, PAGE_SIZE));
-
-  // for pagination
   useEffect(() => {
-    const from = (page - 1) * PAGE_SIZE;
-    const to = from + PAGE_SIZE;
-    setRecords(companies.slice(from, to));
-  }, [page]);
+    setPage(1);
+  }, [pageSize]);
 
+  const [page, setPage] = useState(1);
+
+  // search filter
+  // const filteredData = companies.filter((item) =>
+  //   Object.values(item).some((value) =>
+  //     String(value).toLowerCase().includes(searchQuery.toLowerCase())
+  //   )
+  // );
+
+  const [records, setRecords] = useState(companies.slice(0, pageSize));
   // for sorting
   useEffect(() => {
     const data = sortBy(companies, sortStatus.columnAccessor) as Company[];
     setRecords(sortStatus.direction === "desc" ? data.reverse() : data);
   }, [sortStatus]);
+
+  // pagination
+  useEffect(() => {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+    setRecords(companies.slice(from, to));
+  }, [page, pageSize]);
 
   return (
     <>
@@ -305,11 +324,19 @@ const OrderList = () => {
                       Show
                     </Text>
                     <Select
-                      value={entriesPerPage?.toString()}
-                      onChange={setEntriesPerPage}
-                      data={["10", "25", "50", "100"]}
-                      w={70}
+                      value={pageSize.toString()}
+                      onChange={(value) => {
+                        setPageSize(Number(value));
+                        setPage(1);
+                      }}
+                      data={[
+                        { value: "10", label: "10" },
+                        { value: "25", label: "25" },
+                        { value: "50", label: "50" },
+                        { value: "100", label: "100" },
+                      ]}
                       size="sm"
+                      w={80}
                     />
                     <Text size="sm" c="gray.7">
                       entries
@@ -335,15 +362,20 @@ const OrderList = () => {
 
                 {/* Table */}
                 <DataTable
+                  withTableBorder
                   textSelectionDisabled
                   height={600}
                   columns={objColumnOrdList}
-                  // for pagination
                   records={records}
+                  // records={filteredData}
                   totalRecords={companies.length}
-                  recordsPerPage={perPageNumber}
+                  // for pagination
+                  recordsPerPage={pageSize}
                   page={page}
                   onPageChange={(p) => setPage(p)}
+                  // recordsPerPageOptions={PAGE_SIZE}
+                  // onRecordsPerPageChange={setPageSize}
+
                   // for sorting
                   sortStatus={sortStatus}
                   onSortStatusChange={setSortStatus}
